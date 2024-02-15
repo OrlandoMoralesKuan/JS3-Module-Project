@@ -5,6 +5,7 @@ function setup() {
 
   addSearchFunctionality(allEpisodes);
   addEpisodeSelector(allEpisodes);
+  addFooterContent();
 }
 
 function makePageForEpisodes(episodeList) {
@@ -26,7 +27,7 @@ function makePageForEpisodes(episodeList) {
     const episodeCode = document.createElement("span");
     episodeCode.textContent = `E${String(episode.number).padStart(2, "0")}`;
     movieList.querySelector("h1").append(episodeCode);
-    movieList.querySelector("img").setAttribute("src", episode.image.medium); 
+    movieList.querySelector("img").setAttribute("src", episode.image.medium);
 
     const summary = document.createElement("div");
     summary.innerHTML = episode.summary;
@@ -60,13 +61,24 @@ function addEpisodeSelector(allEpisodes) {
     if (selectedEpisodeId === "default") {
       makePageForEpisodes(allEpisodes);
     } else {
-      
       const selectedEpisode = allEpisodes.find((episode) => episode.id === parseInt(selectedEpisodeId));
       makePageForEpisodes([selectedEpisode]);
     }
   });
 }
 
+function addFooterContent() {
+  const footer = document.querySelector("footer");
+
+  const tvmazeLink = document.createElement("a");
+  tvmazeLink.href = "https://www.tvmaze.com/";
+  tvmazeLink.textContent = "TVMaze.com";
+  tvmazeLink.target = "_blank";
+
+  const attributionText = document.createTextNode("Data provided by ");
+
+  footer.appendChild(attributionText);
+  footer.appendChild(tvmazeLink);
+}
+
 window.onload = setup;
-
-
