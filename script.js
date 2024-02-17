@@ -1,6 +1,6 @@
 const allEpisodes = getAllEpisodes();
 //You can edit ALL of the code here
-const state = {
+/*const state = {
   getAllEpisodes: [],
   searchTerm: "",
 };
@@ -20,14 +20,14 @@ fetchfilms()
   })
   .catch((err) => {
     return "Error occurred";
-  });
+  });*/
 
 function setup() {
   makePageForEpisodes(allEpisodes);
 
   addSearchFunctionality(allEpisodes);
   addEpisodeSelector(allEpisodes);
-  addFooterContent();
+  //addFooterContent();
 }
 
 function makePageForEpisodes(episodeList) {
