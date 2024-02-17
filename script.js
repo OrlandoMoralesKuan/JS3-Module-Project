@@ -27,7 +27,7 @@ function setup() {
 
   addSearchFunctionality(allEpisodes);
   addEpisodeSelector(allEpisodes);
-  //addFooterContent();
+  addFooterContent();
 }
 
 function makePageForEpisodes(episodeList) {
