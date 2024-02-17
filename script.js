@@ -1,3 +1,4 @@
+const allEpisodes = getAllEpisodes();
 //You can edit ALL of the code here
 const state = {
   getAllEpisodes: [],
@@ -22,45 +23,92 @@ fetchfilms()
   });
 
 function setup() {
-  const allEpisodes = state.getAllEpisodes;
   makePageForEpisodes(allEpisodes);
-  const numb = document.getElementById("num-epis");
-  numb.textContent = ` ${allEpisodes.length} `;
-  render();
+
+  addSearchFunctionality(allEpisodes);
+  addEpisodeSelector(allEpisodes);
+  addFooterContent();
 }
 
 function makePageForEpisodes(episodeList) {
-  const root = document.getElementById("root");
-  root.innerHTML = "";
-  for (const episode of episodeList) {
-    const movieList = document.createElement("div");
-    movieList.innerHTML = `
-      <h1>${episode.name} - S${String(episode.season).padStart(
-      2,
-      "0"
-    )}E${String(episode.number).padStart(2, "0")}</h1>
-      <img src="${episode.image.medium}" alt="${episode.name}">
-      <p>${episode.summary}</p>
-    `;
-    root.appendChild(movieList);
+  const contCard = document.getElementById("contCard");
+  contCard.innerHTML = "";
+
+  const currentCount = document.querySelector("#currentEpisodeCount");
+  currentCount.innerText = episodeList.length;
+
+  const allCount = document.querySelector("#allEpisodeCount");
+  allCount.innerText = allEpisodes.length;
+
+  for (episode of episodeList) {
+    const movieList = document.getElementById("root").content.cloneNode(true);
+    movieList.querySelector("h1").textContent = episode.name;
+    const seasonCode = document.createElement("span");
+    seasonCode.textContent = ` - S${String(episode.season).padStart(2, "0")}`;
+    movieList.querySelector("h1").append(seasonCode);
+    const episodeCode = document.createElement("span");
+    episodeCode.textContent = `E${String(episode.number).padStart(2, "0")}`;
+    movieList.querySelector("h1").append(episodeCode);
+    movieList.querySelector("img").setAttribute("src", episode.image.medium);
+
+    const summary = document.createElement("div");
+    summary.innerHTML = episode.summary;
+    const sanitizedSummary = summary.textContent;
+    movieList.querySelector("p").textContent = sanitizedSummary;
+    contCard.appendChild(movieList);
   }
 }
 
-function render() {
-  const searching = document.getElementById("search-bar");
-  const allEpisodes = state.getAllEpisodes;
-  searching.addEventListener("input", function () {
-    state.searchTerm = searching.value.toLowerCase();
-    const filteredEpisodes = allEpisodes.filter((episode) => {
-      return (
-        episode.name.toLowerCase().includes(state.searchTerm) ||
-        episode.summary.toLowerCase().includes(state.searchTerm)
-      );
-    });
-    const numb = document.getElementById("num-epis");
-    numb.textContent = ` ${filteredEpisodes.length}/${allEpisodes.length} `;
+function addSearchFunctionality(allEpisodes) {
+  const searchInput = document.getElementById("search");
+  searchInput.addEventListener("input", function () {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const filteredEpisodes = allEpisodes.filter(
+      (episode) =>
+        episode.name.toLowerCase().includes(searchTerm) ||
+        episode.summary.toLowerCase().includes(searchTerm)
+    );
     makePageForEpisodes(filteredEpisodes);
+    const resultCount = document.getElementById("resultCount");
   });
+}
+
+function addEpisodeSelector(allEpisodes) {
+  const episodeSelector = document.getElementById("episodeSelector");
+  allEpisodes.forEach((episode) => {
+    const option = document.createElement("option");
+    option.value = episode.id;
+    option.textContent = `S${String(episode.season).padStart(2, "0")}E${String(
+      episode.number
+    ).padStart(2, "0")} - ${episode.name}`;
+    episodeSelector.appendChild(option);
+  });
+
+  episodeSelector.addEventListener("change", function () {
+    const selectedEpisodeId = episodeSelector.value;
+    if (selectedEpisodeId === "default") {
+      makePageForEpisodes(allEpisodes);
+    } else {
+      const selectedEpisode = allEpisodes.find(
+        (episode) => episode.id === parseInt(selectedEpisodeId)
+      );
+      makePageForEpisodes([selectedEpisode]);
+    }
+  });
+}
+
+function addFooterContent() {
+  const footer = document.querySelector("footer");
+
+  const tvmazeLink = document.createElement("a");
+  tvmazeLink.href = "https://www.tvmaze.com/";
+  tvmazeLink.textContent = "TVMaze.com";
+  tvmazeLink.target = "_blank";
+
+  const attributionText = document.createTextNode("Data provided by ");
+
+  footer.appendChild(attributionText);
+  footer.appendChild(tvmazeLink);
 }
 
 window.onload = setup;

@@ -9,10 +9,32 @@
   </head>
 
   <body>
-    <input type="search" id="search-bar" name="q" placeholder="🔍Search term" />
-    Episodes Match,<span id="num-epis"></span>
+    <template id="root">
+      <div>
+        <h1>Name</h1>
+        <img />
+        <p>Summary</p>
+      </div>
+    </template>
+    <header>
+      <input type="text" id="search" placeholder="Search episodes..." />
 
-    <div id="root"></div>
+      <div id="episodeSelectorDiv">
+        <select id="episodeSelector">
+          <option value="default">Select Episode</option>
+        </select>
+      </div>
+      <p class="displayText">
+        Displaying <span id="currentEpisodeCount"></span>/<span
+          id="allEpisodeCount"
+        ></span>
+        episodes
+      </p>
+    </header>
+
+    <div id="contCard"></div>
+
+    <footer></footer>
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <!--<script src="episodes.js"></script>-->
